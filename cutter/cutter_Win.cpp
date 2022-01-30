@@ -23,32 +23,32 @@ int main(int argc, char const *argv[])
     }
 
     char name_inp[260];
-    //scanf_s("%d", &cut_n);
+    char name_out[260];
     strcpy_s(name_inp, argv[1]);
-
     int cut_n = atoi(argv[2]);
 
+    errno_t err;
     FILE* input;
-    fopen_s(&input, name_inp, "rb");
-    if (!input) {
-        perror(name_inp);
-        exit(1);
-    }
+    err = fopen_s(&input, name_inp, "rb");
+    if (err) { perror(name_inp); exit(1); } // opened file
 
     fseek(input, 0L, SEEK_END);
     int sz = ftell(input);
     rewind(input);
+
     unsigned char* input_data;
     input_data = (unsigned char*)malloc(sz);
-
     fread(input_data, 1, sz, input);
     
     FILE* output;
 
-    fopen_s(&output, "left", "wb");
+    char* point = strrchr(name_inp, '.');
+    strncpy_s(name_out, name_inp, point - name_inp);
+
+    fopen_s(&output, strcat_s(name_out, ".001"), "wb");
     fwrite(&input_data[0], 1, cut_n, output);
     fclose(output);
-    fopen_s(&output, "right", "wb");
+    fopen_s(&output, strcat_s(name_out, ".002"), "wb");
     fwrite(&input_data[cut_n], 1, sz - cut_n, output);
 
     fclose(input);

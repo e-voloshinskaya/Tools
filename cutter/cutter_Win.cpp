@@ -44,11 +44,16 @@ int main(int argc, char const *argv[])
 
     char* point = strrchr(name_inp, '.');
     strncpy_s(name_out, name_inp, point - name_inp);
+    strcat_s(name_out, 260, ".001");
 
-    fopen_s(&output, strcat_s(name_out, ".001"), "wb");
+    fopen_s(&output, name_out, "wb");
     fwrite(&input_data[0], 1, cut_n, output);
     fclose(output);
-    fopen_s(&output, strcat_s(name_out, ".002"), "wb");
+
+    char* one = strrchr(name_out, '1');
+    strncpy_s(name_out, name_out, one - name_out);
+    strcat_s(name_out, 260, "2");
+    fopen_s(&output, name_out, "wb");
     fwrite(&input_data[cut_n], 1, sz - cut_n, output);
 
     fclose(input);

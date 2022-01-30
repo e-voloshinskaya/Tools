@@ -6,17 +6,15 @@
 int main(int argc, char const *argv[])
 {
     if (!strcmp(argv[1], "-h")) {
-        printf("This program cuts the contents of a file [filename]\n in two parts, according to the input integer parameter [cut_n].\n\
-                \t The two resulting files are compiled as follows:\n\
-                \t The first file contains the first [cut_n] consecutive bytes of the source file. \
-                The second file contains all the remaining bytes of the source file taken consecutively starting from the sixth byte of the source file.\n\
-                Syntax: [command name] [filename] [cut_n (unsigned integer number)].\n");
-        //printf("!!!  [string length] can be any integer value. If it is\n\t- less than or equal to zero;\
-                \n\t- larger than the file size,\n  then the information will be displayed in one line.\
-                \nIf [string length] has incorrect format, it will be translated to 0\n  (if a string doesn't contain numbers) or some number.\n");
+        printf("This program cuts the contents of a file [filename]\n  in two parts, according to the input integer parameter [cut_n].\
+                \n  The two resulting files are compiled as follows:");
+        printf("The first file contains the first [cut_n] consecutive bytes of the source file. ");
+        printf("The second file contains all the remaining bytes of the source file taken consecutively starting from the sixth byte of the source file.\
+                \n\nSyntax: [command name] [filename] [cut_n (unsigned integer number)].\n");
         exit(0);
     }
-    if ((strspn(argv[2], "1234567890" != strlen(argv[2])) || (argc > 3) || (argc < 3)) { // first condition - if arg[2] contains symbols apart from digits
+    // first condition - if arg[2] contains symbols apart from digits
+    if ((argc != 3) || (strspn(argv[2], "1234567890") != strlen(argv[2]))) {
         printf("Incorrect input.\n  Syntax: [command name] [filename] [cut_n (unsigned integer number)].\n");
         printf("  Try 'cutter.exe -h' for more information.\n");
         exit(1);
@@ -26,11 +24,13 @@ int main(int argc, char const *argv[])
     char name_out[260];
     strcpy_s(name_inp, argv[1]);
     int cut_n = atoi(argv[2]);
+    printf("Your input:  filename = '%s', cut_n = %d.\n", name_inp, cut_n);
+    printf("  Try 'cutter.exe -h' for more information.\n");
 
     errno_t err;
     FILE* input;
     err = fopen_s(&input, name_inp, "rb");
-    if (err) { perror(name_inp); exit(1); } // opened file
+    if (err) { perror(name_inp); exit(1); } // can't open file
 
     fseek(input, 0L, SEEK_END);
     int sz = ftell(input);

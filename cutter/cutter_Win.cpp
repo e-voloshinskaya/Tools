@@ -1,19 +1,40 @@
 ﻿#include <iostream>
-#include <stdio.h>
-#include <malloc.h>
+#include <cstring>
+//#include <stdio.h>
+//#include <malloc.h>
 
 int main(int argc, char const *argv[])
 {
-    int cut = 0;
+    if (!strcmp(argv[1], "-h")) {
+        printf("This program cuts the contents of a file [filename]\n in two parts, according to the input integer parameter [cut_n].\n\
+                \t The two resulting files are compiled as follows:\n\
+                \t The first file contains the first [cut_n] consecutive bytes of the source file. \
+                The second file contains all the remaining bytes of the source file taken consecutively starting from the sixth byte of the source file.\n\
+                Syntax: [command name] [filename] [cut_n (unsigned integer number)].\n");
+        //printf("!!!  [string length] can be any integer value. If it is\n\t- less than or equal to zero;\
+                \n\t- larger than the file size,\n  then the information will be displayed in one line.\
+                \nIf [string length] has incorrect format, it will be translated to 0\n  (if a string doesn't contain numbers) or some number.\n");
+        exit(0);
+    }
+    if ((strspn(argv[2], "1234567890" != strlen(argv[2])) || (argc > 3) || (argc < 3)) { // first condition - if arg[2] contains symbols apart from digits
+        printf("Incorrect input.\n  Syntax: [command name] [filename] [cut_n (unsigned integer number)].\n");
+        printf("  Try 'cutter.exe -h' for more information.\n");
+        exit(1);
+    }
+
     char name_inp[260];
-
-    //scanf_s("%d", &cut);
+    //scanf_s("%d", &cut_n);
     strcpy_s(name_inp, argv[1]);
-    cut = atoi(argv[2]);
 
+    int cut_n = atoi(argv[2]);
 
     FILE* input;
-    fopen_s(&input, name_inp, "rb"); if (!input) { perror(name_inp); exit(1); }
+    fopen_s(&input, name_inp, "rb");
+    if (!input) {
+        perror(name_inp);
+        exit(1);
+    }
+
     fseek(input, 0L, SEEK_END);
     int sz = ftell(input);
     rewind(input);
@@ -25,10 +46,10 @@ int main(int argc, char const *argv[])
     FILE* output;
 
     fopen_s(&output, "left", "wb");
-    fwrite(&input_data[0], 1, cut, output);
+    fwrite(&input_data[0], 1, cut_n, output);
     fclose(output);
     fopen_s(&output, "right", "wb");
-    fwrite(&input_data[cut], 1, sz - cut, output);
+    fwrite(&input_data[cut_n], 1, sz - cut_n, output);
 
     fclose(input);
     fclose(output);

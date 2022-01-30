@@ -24,7 +24,7 @@ int main(int argc, char const* argv[])
     }
     if (argc != 3) {
         printf("Incorrect input.\n  Syntax: [command name] [filename] [string length (integer number)].\n");
-        printf("  Try 'to_char.exe -h' for more information.\n");
+        printf("  Try 'bin2asm.exe -h' for more information.\n");
         exit(1);
     }
     int str_size = atoi(argv[2]);
@@ -34,7 +34,7 @@ int main(int argc, char const* argv[])
     //strcpy(name_inp, argv[1]);
     strcpy_s(name_inp, argv[1]); // got arguments from console
     printf("Your input:  filename = '%s', str_length = %d.\n", name_inp, str_size);
-    printf("  Try 'to_char.exe -h' for more information.\n");
+    printf("  Try 'bin2asm.exe -h' for more information.\n");
 
     errno_t err;
     FILE* input_file;
